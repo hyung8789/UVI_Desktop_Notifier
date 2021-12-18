@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UVI Desktop Notifier", "UVI Desktop Notifier.vbproj", "{6E007D47-2765-4308-BDE7-5F48D277E05E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E007D47-2765-4308-BDE7-5F48D277E05E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E007D47-2765-4308-BDE7-5F48D277E05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E007D47-2765-4308-BDE7-5F48D277E05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E007D47-2765-4308-BDE7-5F48D277E05E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82DDE51A-C2F8-4C8F-9DCD-49F787CFDA7D}
+	EndGlobalSection
+EndGlobal

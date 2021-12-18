@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="apiKey" Description="APi 키" Type="System.String" Scope="User">
+      <Value Profile="(Default)">zJW89pnZnfPz%2FsP%2B3Dicw9FdpysngtOm%2FBoEeeWgtYyzZlZ5NJlvb2GveKlws%2BMQBicYo1%2F9YEwRV6UZIwDzRQ%3D%3D</Value>
+    </Setting>
+    <Setting Name="excelDbFileName" Description="위도, 경도에 따른 지역명 및 지역별 지점코드 엑셀 DB 파일명 (동일 경로)" Type="System.String" Scope="User">
+      <Value Profile="(Default)">db.xlsx</Value>
+    </Setting>
+    <Setting Name="excelDbFileWorkSheetName" Description="위도, 경도에 따른 지역명 및 지역별 지점코드 엑셀 DB 시트명" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sheet1</Value>
+    </Setting>
+    <Setting Name="excelDbFilePassword" Description="위도, 경도에 따른 지역명 및 지역별 지점코드 엑셀 DB 파일 무결성을 위한 비밀번호" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%mU3ZvK2lBa4KzKg9l/N@r!CK%AHf2%2A3BH#5Rk</Value>
+    </Setting>
+    <Setting Name="staticGeoLocationLatitude" Description="사용자가 선택 한 지역의 위도" Type="System.Double" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="staticGeoLocationLongitude" Description="사용자가 선택 한 지역의 경도" Type="System.Double" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="staticGeoLocationSelectedIndex" Description="사용자가 선택 한 지역의 드롭다운 인덱스" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="autoDetectGeoLocation" Description="현재 기기 위치에 따라 자동으로 지역 탐지 여부 (선택 된 지역 목록 무시)" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="geoPositionAccuracy" Description="위치 정확도" Type="System.Device.Location.GeoPositionAccuracy" Scope="User">
+      <Value Profile="(Default)">Default</Value>
+    </Setting>
+    <Setting Name="numOfTriesThreshold" Description="최대 재시도 임계 횟수" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
