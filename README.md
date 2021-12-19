@@ -14,11 +14,11 @@ test
 
 ## < Demo & Screenshot >
 <img src="./demo/Tray.png">
-<img src="./demo/low.png">
-<img src="./demo/medium.png">
-<img src="./demo/high.png">
-<img src="./demo/very_high.png">
-<img src="./demo/dangerous.png">
+<img src="./demo/Low.png">
+<img src="./demo/Medium.png">
+<img src="./demo/High.png">
+<img src="./demo/Very_High.png">
+<img src="./demo/Dangerous.png">
 <img src="./demo/OptionForm.png">
 <br />
 
