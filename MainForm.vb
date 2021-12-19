@@ -55,7 +55,7 @@ Public Class MainForm
 
             If Not IsNothing(similarGeoLocationInfo) Then '현재 기기의 위치 정보 기반 가장 유사한 구역 정보가 존재하면
                 Dim result As UviApiResponseResult = uviManager.GetUviApiResponseResult(similarGeoLocationInfo)
-                '디버그용 : Dim result As UviApiResponseResult = uviManager.DebugGenUviApiResponseResult()
+                'Dim result As UviApiResponseResult = uviManager.DebugGenUviApiResponseResult() '디버그용
                 resultMsg = uviManager.GetUviResultMsg(similarGeoLocationInfo, result)
 
                 Dim todayUvi As Byte = result.TodayUvi

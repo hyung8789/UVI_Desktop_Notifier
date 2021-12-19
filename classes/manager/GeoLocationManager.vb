@@ -221,6 +221,7 @@ END_PROC: '종료 처리 루틴
 
             '설정에서 고정 된 위도, 경도 반환
             retVal = New GeoCoordinate(latitude, longitude)
+            GoTo END_PROC
 
         Else '현재 기기 위치에 따라 자동으로 지역 탐지 (선택 된 지역 목록 무시)
             If Me._watcher.DesiredAccuracy <> My.Settings.geoPositionAccuracy Then '위치 정확도가 변경되었을 경우
@@ -232,17 +233,17 @@ END_PROC: '종료 처리 루틴
             End If
 
 SYNC_TRY_START_PROC: '동기적으로 위치 공급자로부터 데이터를 가져오는 처리 루틴
-            ' 위치 공급자로부터 TryStart로 동기적으로 TimeSpan 안에 가져오기를 시도하였으나, 
-            ' 정상적으로 가져오지 못하거나 알 수 없는 위치 정보를 가져오는 경우
-            ' ---
-            ' => 위치 서비스가 아직 Initializing 과정에 있을 경우에 발생, 1초 대기하면서 재시도 (대략 위치 서비스가 완전히 Ready 상태가 되는데 2~3초 정도 걸리는 것으로 예상)
-
             isSuccess = Me._watcher.TryStart(False, TimeSpan.FromMilliseconds(1))
             retVal = Me._watcher.Position.Location
         End If
 
         If Not isSuccess Or retVal.IsUnknown Then '위치 정보를 가져오지 못했거나, 위도, 경도 데이터가 포함되지 않았으면
             If numOfTries <= My.Settings.numOfTriesThreshold Then '최대 재시도 임계 횟수를 넘지 않은 경우
+                ' 위치 공급자로부터 TryStart로 동기적으로 TimeSpan 안에 가져오기를 시도하였으나, 
+                ' 정상적으로 가져오지 못하거나 알 수 없는 위치 정보를 가져오는 경우
+                ' ---
+                ' => 위치 서비스가 아직 Initializing 과정에 있을 경우에 발생, 1초 대기하면서 재시도 (위치 서비스가 완전히 Ready 상태가 되는데 2~3초 정도 걸리는 것으로 예상)
+
                 numOfTries += 1
                 Thread.Sleep(TimeSpan.FromSeconds(1)) '1초 대기
                 Debug.WriteLine("재시도 횟수 : " + numOfTries.ToString)
@@ -252,6 +253,9 @@ SYNC_TRY_START_PROC: '동기적으로 위치 공급자로부터 데이터를 가
             Throw New Exception("알 수 없는 위치 정보 : 재시도하거나 수동으로 지역을 선택하세요.")
         End If
 
+        GoTo END_PROC
+
+END_PROC:
         Return retVal '위도, 경도를 포함 한 위치 정보 데이터 반환
     End Function
     ''' <summary>

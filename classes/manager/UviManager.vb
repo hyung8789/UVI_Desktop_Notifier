@@ -28,7 +28,7 @@ Public Class UviManager
         Dim resultMsg = String.Empty '결과 문자열
 
         If IsNothing(srcGeoLocationInfo) Or IsNothing(srcUviAPiResponseResult) Then
-            Throw New Exception("구역 정보 혹은 자외선 지수 API 응답 결과가 존재하지 않음 : 재시도하거나 수동으로 지역을 선택하세요.")
+            Throw New Exception("지원하지 않는 지역 혹은 자외선 지수 API 응답 결과가 존재하지 않음 : 재시도하거나 수동으로 지역을 선택하세요.")
         End If
 
         Dim todayUviWarningLevel As UviWarningLevel = Constants.GetUviWarningLevelFromUvi(srcUviAPiResponseResult.TodayUvi)
@@ -103,9 +103,9 @@ Public Class UviManager
         Dim maxVal As Byte = 11 '최대 자외선 지수
 
         Dim retVal As New UviApiResponseResult '반환 값
-        retVal.TodayUvi = rand.Next(minVal, maxVal)
-        retVal.TomorrowUvi = rand.Next(minVal, maxVal)
-        retVal.DayAfterTomorrowUvi = rand.Next(minVal, maxVal)
+        retVal.TodayUvi = rand.Next(minVal, maxVal + 1)
+        retVal.TomorrowUvi = rand.Next(minVal, maxVal + 1)
+        retVal.DayAfterTomorrowUvi = rand.Next(minVal, maxVal + 1)
 
         Return retVal
     End Function
