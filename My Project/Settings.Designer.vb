@@ -212,6 +212,22 @@ Namespace My
                 Me("numOfTriesThreshold") = value
             End Set
         End Property
+        
+        '''<summary>
+        '''유사 구역 판별을 위한 임계값
+        '''</summary>
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Configuration.SettingsDescriptionAttribute("유사 구역 판별을 위한 임계값"),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.01")>  _
+        Public Property similarLocationThreshold() As Double
+            Get
+                Return CType(Me("similarLocationThreshold"),Double)
+            End Get
+            Set
+                Me("similarLocationThreshold") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

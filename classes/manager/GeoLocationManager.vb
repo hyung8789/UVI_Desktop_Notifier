@@ -167,13 +167,9 @@ ALLOCATE_PROC: '새로운 대상 위치 정보 데이터 (srcGeoCoord)를 통한
 
                 Dim similarLocationAddressLinqQuery = (From cell In latitudeRange
                                                        Join cell2 In longitudeRange On cell.Start.Row Equals cell2.Start.Row '위도와 경도의 두 행 번호가 일치 한 것끼리 내부 조인
-                                                       Where CDbl(cell.Value.ToString).CompareTo(srcGeoCoord.Latitude) >= 0 And '셀의 위도가 찾고자 하는 위도와 비교하여 같거나 더 큰 경우
-                                                       CDbl(cell2.Value.ToString).CompareTo(srcGeoCoord.Longitude) >= 0 '셀의 경도가 찾고자 하는 경도와 비교하여 같거나 더 큰 경우
+                                                       Where Math.Abs(CDbl(cell.Value.ToString) - srcGeoCoord.Latitude) <= My.Settings.similarLocationThreshold And '셀의 위도 - 찾고자 하는 위도의 절대값이 임계값보다 같거나 작은 경우
+                                                       Math.Abs(CDbl(cell2.Value.ToString) - srcGeoCoord.Longitude) <= My.Settings.similarLocationThreshold '셀의 경도 - 찾고자 하는 경도의 절대값이 임계값보다 같거나 작은 경우
                                                        Select cell.Address) '가장 유사한 지역들의 셀 주소에 대한 LINQ 쿼리
-
-                ' For Each i In similarLocationAddressLinqQuery
-                ' Debug.WriteLine(Regex.Replace(i, "[^0-9]", String.Empty)) '숫자가 아닌 모든 문자에 대해 empty로 치환
-                ' Next
 
                 If similarLocationAddressLinqQuery.Count() > 0 Then '유사한 지역의 셀 주소가 존재하면
                     ' 행 번호는 1부터 시작하지만, resultRange 기준 오프셋 0은 데이터가 포함 된 셀만 포함하므로, 행 번호 2와 동일
@@ -190,6 +186,7 @@ ALLOCATE_PROC: '새로운 대상 위치 정보 데이터 (srcGeoCoord)를 통한
                         resultRange.GetCellValue(Of String)(resultRangeRowOffset, 2) + " " +
                         resultRange.GetCellValue(Of String)(resultRangeRowOffset, 3)).Trim() '해당 구역의 전체 이름
 
+                    '대상 위치 정보 데이터로 위도, 경도 할당
                     lastSimilarGeoLocationInfo.Latitude = srcGeoCoord.Latitude '위도
                     lastSimilarGeoLocationInfo.Longitude = srcGeoCoord.Longitude '경도
 
@@ -242,7 +239,7 @@ SYNC_TRY_START_PROC: '동기적으로 위치 공급자로부터 데이터를 가
                 ' 위치 공급자로부터 TryStart로 동기적으로 TimeSpan 안에 가져오기를 시도하였으나, 
                 ' 정상적으로 가져오지 못하거나 알 수 없는 위치 정보를 가져오는 경우
                 ' ---
-                ' => 위치 서비스가 아직 Initializing 과정에 있을 경우에 발생, 1초 대기하면서 재시도 (위치 서비스가 완전히 Ready 상태가 되는데 2~3초 정도 걸리는 것으로 예상)
+                ' => 위치 서비스가 아직 Initializing 과정에 있을 경우에 발생, 1초 대기하면서 재시도
 
                 numOfTries += 1
                 Thread.Sleep(TimeSpan.FromSeconds(1)) '1초 대기
@@ -285,6 +282,8 @@ END_PROC:
 #Region "Private"
     Private Shared _instance As GeoLocationManager = Nothing '자신의 고유 인스턴스
     Private _watcher As GeoCoordinateWatcher '위치 데이터 감시자
+
+    Private Const AVERAGE_RADIUS_OF_EARTH_KM As Double = 6371 '지구 평균 반지름 길이 (km)
     ''' <summary>
     ''' GeoLocationManager 인스턴스 초기화
     ''' </summary>
@@ -295,6 +294,34 @@ END_PROC:
         'AddHandler Me._watcher.StatusChanged, AddressOf Me.watcher_StatusChanged
         'AddHandler Me._watcher.PositionChanged, AddressOf Me.watcher_PositionChanged
     End Sub
+    ''' <summary>
+    ''' 각도 (Degree)를 Radian 단위로 변환
+    ''' </summary>
+    ''' <param name="srcAngle">각도 (Degree)</param>
+    ''' <returns>Radian 단위로 변환 된 각도</returns>
+    Private Function DegreeToRadian(ByVal srcAngle As Double) As Double
+        Return (Math.PI / 180) * srcAngle
+    End Function
+    ''' <summary>
+    ''' 두 지점 사이의 거리 반환
+    ''' </summary>
+    ''' <param name="srcGeoCoord1">지점 1</param>
+    ''' <param name="srcGeoCoord2">지점 2</param>
+    ''' <returns>KM 단위 거리</returns>
+    Private Function GetDistanceBetweenCoords(ByVal srcGeoCoord1 As GeoCoordinate, ByVal srcGeoCoord2 As GeoCoordinate) As Integer
+        ' https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+
+        Dim latitudeDistance As Double = Me.DegreeToRadian(srcGeoCoord1.Latitude - srcGeoCoord2.Latitude)
+        Dim longitudeDistance As Double = Me.DegreeToRadian(srcGeoCoord1.Longitude - srcGeoCoord2.Longitude)
+
+        Dim a As Double = Math.Sin(latitudeDistance / 2) * Math.Sin(latitudeDistance / 2) +
+        Math.Cos(Me.DegreeToRadian(srcGeoCoord1.Latitude)) * Math.Cos(Me.DegreeToRadian(srcGeoCoord2.Latitude)) *
+        Math.Sin(longitudeDistance / 2) * Math.Sin(longitudeDistance / 2)
+
+        Dim c As Double = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a))
+
+        Return CInt(Math.Round(AVERAGE_RADIUS_OF_EARTH_KM * c))
+    End Function
     ''' <summary>
     ''' 상태가 변경되었을 시, GeoCoordinateWatcher의 이벤트 핸들러로서 처리 될 메소드
     ''' </summary>

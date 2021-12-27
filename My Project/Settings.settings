@@ -32,5 +32,8 @@
     <Setting Name="numOfTriesThreshold" Description="최대 재시도 임계 횟수" Type="System.SByte" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="similarLocationThreshold" Description="유사 구역 판별을 위한 임계값" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.01</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
