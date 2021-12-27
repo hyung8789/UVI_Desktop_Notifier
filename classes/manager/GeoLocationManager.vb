@@ -163,7 +163,8 @@ ALLOCATE_PROC: '새로운 대상 위치 정보 데이터 (srcGeoCoord)를 통한
                 ' 위도 및 경도와 가장 일치 한 행정구역코드 및 1단계, 2단계, 3단계를 병합하여 해당 구역의 전체 이름으로 반환
                 ' ---
                 ' 1) 사용자가 임의로 엑셀 파일을 수정하지 못하도록 암호로 파일을 보호 할 것
-                ' 2) 위도와 경도를 기준 오름차순으로 정렬에 따른 오버헤드를 줄이기 위해 미리 엑셀 상에서 정렬 적용 
+                ' 2) 위도와 경도를 기준 오름차순으로 정렬에 따른 오버헤드를 줄이기 위해 미리 엑셀 상에서 정렬 적용
+                '   => 2021-12-27 : 지역 탐지 방법 변경에 따라 정렬 할 필요 없음
 
                 Dim similarLocationAddressLinqQuery = (From cell In latitudeRange
                                                        Join cell2 In longitudeRange On cell.Start.Row Equals cell2.Start.Row '위도와 경도의 두 행 번호가 일치 한 것끼리 내부 조인
